@@ -6,8 +6,9 @@ authors = ["James Hines <jameshines10@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
-crewai = "^0.28.8"
+python = ">=3.10.0,<3.12"
+crewai = "^0.11.0"
+gpt-researcher = "^0.2.6"
 
 
 [build-system]

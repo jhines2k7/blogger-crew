@@ -1,6 +1,4 @@
 from crewai import Agent
-from tools.search_tools import SearchTools
-
 
 class BloggerCrewAgents():
     def content_strategist_agent(self):
@@ -20,7 +18,7 @@ class BloggerCrewAgents():
             goal='Research and write the blog post',
             backstory="""As a skilled wordsmith, you craft compelling narratives that captivate readers, ensuring
             the content is well-researched, engaging, and tailored to the audience.""",
-            tools=[SearchTools.search_internet],
+            tools=[],
             verbose=True,
             allow_delegation=True,
         )
@@ -41,7 +39,7 @@ class BloggerCrewAgents():
             goal='Optimize the blog post for search engines',
             backstory="""As an SEO expert, you leverage your knowledge of search engine algorithms to improve the
             post's visibility, researching keywords and suggesting changes to boost rankings.""",
-            tools=[SearchTools.search_internet],
+            tools=[],
             verbose=True,
             allow_delegation=True,
         )
