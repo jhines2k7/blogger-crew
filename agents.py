@@ -75,7 +75,8 @@ class BloggerCrewAgents():
             goal='Provide original photographs or illustrations for the blog post',
             backstory="""As a visual artist, you capture or create unique images that enrich the content, giving it
             a distinctive look and feel that sets it apart. You collaborate with the writer to understand the content and 
-            provide relevant images. You can also ask the writer to provide you with a summary of the content to be illustrated.""",
+            provide relevant images. You can also ask the writer to provide you with a summary of the content to be illustrated.
+            Your prompts strive for photo realism when possible.""",
             verbose=True,
             allow_delegation=True,
             tools=[dalle_tool]

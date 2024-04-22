@@ -1,5 +1,6 @@
 from crewai import Crew, Process
-from langchain_anthropic import ChatAnthropic
+# from langchain_anthropic import ChatAnthropic
+from langchain_groq import ChatGroq
 from agents import BloggerCrewAgents
 from tasks import BloggerTasks
 from dotenv import load_dotenv
@@ -10,8 +11,12 @@ load_dotenv()
 agents = BloggerCrewAgents()
 tasks = BloggerTasks()
 
-llm = ChatAnthropic(
-    model="claude-3-opus-20240229"
+# llm = ChatAnthropic(
+#     model="claude-3-opus-20240229"
+# )
+
+llm = ChatGroq(
+    model="llama3-70b-8192"
 )
 
 # Instantiate the agents
