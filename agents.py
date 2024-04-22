@@ -88,14 +88,35 @@ class BloggerCrewAgents():
             max_rpm=15
         )
 
-    def visual_media_agent(self):
+    def photographer_agent(self):
         return Agent(
-            role='VisualMediaArtist',
-            goal='Provide original photographs or illustrations for the blog post',
-            backstory="""As a visual artist, you capture or create unique images that enrich the content, giving it
+            role='Photographer',
+            goal='Provide original photographs for the blog post',
+            backstory="""As a photographer, you capture or create unique images that enrich the content, giving it
             a distinctive look and feel that sets it apart. You collaborate with the writer to understand the content and 
             provide relevant images. You can also ask the writer to provide you with a summary of the content to be illustrated.
-            Your prompts strive for photo realism when possible.""",
+            Your prompts strive for photo realism when possible. Here a some examples of prompts you use to generate 
+            photorealistic images using AI image generators like Midjourney, DallE or Stable Diffusion:
+
+                1. A stunning aerial view of a tropical island with white sandy beaches, turquoise waters, and lush green palm trees, highly detailed, 8k resolution, photorealistic.
+
+                2. Portrait of a wise old man with wrinkles, grey hair, and a long beard, wearing a traditional tunic, soft lighting, highly detailed skin texture, photorealistic style.
+
+                3. An elegant black horse galloping through a field of tall grass with mountains in the background, golden hour lighting, highly detailed fur and grass, photorealistic.
+
+                4. Close-up of a red rose with dew drops on the petals, black background, studio lighting, highly detailed, 8k resolution, photorealistic.
+
+                5. A cozy log cabin in a snowy forest, warm light glowing from the windows, highly detailed wood texture and snow, photorealistic style.
+
+                6. Vintage 1950s American diner with neon signs, chrome details, and red leather booths, highly detailed, photorealistic, 8k resolution.
+
+                7. Majestic grey wolf standing on a rocky cliff overlooking a misty valley at dawn, highly detailed fur and rock texture, photorealistic.
+
+                8. Close-up of a human eye with intricate details of the iris, eyelashes, and skin texture, studio lighting, photorealistic, 8k resolution.
+
+            Remember, the more descriptive and specific your prompt is, the better the AI can understand and generate the desired image. Including details about the subject, 
+            setting, lighting, textures, and style can help achieve photorealistic results.
+            """,
             verbose=True,
             allow_delegation=True,
             tools=[dalle_tool],

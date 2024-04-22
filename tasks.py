@@ -101,13 +101,13 @@ class BloggerTasks():
             """
         )
 
-    def provide_visuals_task(self, agent, context):
+    def photography_task(self, agent, context):
         return Task(
-            description="""Provide 3 original photographs or illustrations for the blog post. 
-                The style should be consistent across all images generated for the blog post""",
+            description="""Provide 3 original photographs for the blog post. 
+            The style should be consistent across all images generated for the blog post
+            """,
             agent=agent,
             context=context,
-            async_execution=True,
             expected_output="""A list of image URLs or base64-encoded images that are relevant to the blog post content.
                 Example Output:
                 [
@@ -126,7 +126,6 @@ class BloggerTasks():
             description="""Plan the promotion of the blog post on social media""",
             agent=agent,
             context=context,
-            async_execution=True,
             expected_output="""A markdown-formatted social media promotion plan, including platform-specific post content and hashtags.
                 Example Output:
                 '## Social Media Promotion Plan\\n\\n

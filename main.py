@@ -27,7 +27,7 @@ content_strategy_task = tasks.content_strategy_task(content_strategist)
 research_and_write_task = tasks.research_and_write_task(writer, [content_strategy_task])
 edit_post_task = tasks.edit_post_task(editor, [research_and_write_task])
 plan_social_media_promotion_task = tasks.plan_social_media_promotion_task(social_media_manager, [edit_post_task])
-provide_visuals_task = tasks.provide_visuals_task(visual_media_agent, [edit_post_task])
+photography_task = tasks.photography_task(visual_media_agent, [edit_post_task])
 
 crew = Crew(
     agents=[content_strategist, writer, researcher, editor, social_media_manager, visual_media_agent],
@@ -35,11 +35,14 @@ crew = Crew(
            research_and_write_task, 
            edit_post_task, 
            plan_social_media_promotion_task, 
-           provide_visuals_task],
+           photography_task],
     process=Process.hierarchical,
     manager_llm=gpt4,
     verbose=2
 )
+
+# clear the output_files directory
+
 
 # Kick off the crew's work
 results = crew.kickoff()
@@ -47,3 +50,5 @@ results = crew.kickoff()
 # Print the results
 print("Crew Work Results:")
 print(results)
+
+exit()
