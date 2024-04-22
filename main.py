@@ -1,5 +1,5 @@
 from crewai import Crew, Process
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from agents import BloggerCrewAgents
 from tasks import BloggerTasks
 from dotenv import load_dotenv
@@ -10,8 +10,8 @@ load_dotenv()
 agents = BloggerCrewAgents()
 tasks = BloggerTasks()
 
-llm = ChatOpenAI(
-    model="gpt-4-turbo"
+llm = ChatAnthropic(
+    model="claude-3-opus-20240229"
 )
 
 # Instantiate the agents
