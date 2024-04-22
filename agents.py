@@ -2,6 +2,8 @@ from crewai import Agent
 from tools.research_tool import ResearchTool
 from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
 from langchain.tools import Tool
+from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 
 dalle = DallEAPIWrapper()
 
@@ -9,6 +11,14 @@ dalle_tool = Tool(
     name="Generate Images with DALL-E",
     description="Generate images using the DALL-E API.",
     func=dalle.run
+)
+
+llama3 = ChatGroq(
+    model="llama3-70b-8192"
+)
+
+gpt4 = ChatOpenAI(
+    model="gpt-4-turbo"
 )
 
 class BloggerCrewAgents():
@@ -21,7 +31,9 @@ class BloggerCrewAgents():
             try to be specific about the topic you want to research""",
             allow_delegation=True,
             verbose=True,
-            max_iter=15
+            max_iter=15,
+            llm=llama3,
+            max_rpm=15
         )
 
     def researcher_agent(self):
@@ -33,6 +45,8 @@ class BloggerCrewAgents():
             tools=[ResearchTool.perform_research],
             verbose=True,
             allow_delegation=True,
+            llm=gpt4,
+            max_rpm=15
         )
 
     def writer_agent(self):
@@ -45,6 +59,8 @@ class BloggerCrewAgents():
             summary of the research done so far.""",
             verbose=True,
             allow_delegation=True,
+            llm=llama3,
+            max_rpm=15
         )
 
     def editor_agent(self):
@@ -55,6 +71,8 @@ class BloggerCrewAgents():
             it meets the overall strategy and maintains the highest standards.""",
             verbose=True,
             allow_delegation=True,
+            llm=llama3,
+            max_rpm=15
         )
 
     def seo_specialist_agent(self):
@@ -64,9 +82,10 @@ class BloggerCrewAgents():
             backstory="""As an SEO expert, you leverage your knowledge of search engine algorithms to improve the
             post's visibility, researching keywords and suggesting changes to boost rankings. When collaborating with the researcher, you
             try to be specific about the topic you want to research""",
-            tools=[],
             verbose=True,
             allow_delegation=True,
+            llm=llama3,
+            max_rpm=15
         )
 
     def visual_media_agent(self):
@@ -79,7 +98,9 @@ class BloggerCrewAgents():
             Your prompts strive for photo realism when possible.""",
             verbose=True,
             allow_delegation=True,
-            tools=[dalle_tool]
+            tools=[dalle_tool],
+            llm=gpt4,
+            max_rpm=15
         )
 
     def social_media_manager_agent(self):
@@ -90,6 +111,8 @@ class BloggerCrewAgents():
             engaging with the audience and expanding the blog's reach.""",
             verbose=True,
             allow_delegation=True,
+            llm=llama3,
+            max_rpm=15
         )
 
     def web_developer_agent(self):
@@ -100,4 +123,6 @@ class BloggerCrewAgents():
             displayed, and that the website's backend supports the new content.""",
             verbose=True,
             allow_delegation=True,
+            llm=llama3,
+            max_rpm=15
         )

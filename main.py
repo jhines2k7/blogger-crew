@@ -1,6 +1,5 @@
 from crewai import Crew, Process
-# from langchain_anthropic import ChatAnthropic
-from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 from agents import BloggerCrewAgents
 from tasks import BloggerTasks
 from dotenv import load_dotenv
@@ -11,12 +10,8 @@ load_dotenv()
 agents = BloggerCrewAgents()
 tasks = BloggerTasks()
 
-# llm = ChatAnthropic(
-#     model="claude-3-opus-20240229"
-# )
-
-llm = ChatGroq(
-    model="llama3-70b-8192"
+gpt4 = ChatOpenAI(
+    model="gpt-4-turbo"
 )
 
 # Instantiate the agents
@@ -42,7 +37,7 @@ crew = Crew(
            plan_social_media_promotion_task, 
            provide_visuals_task],
     process=Process.hierarchical,
-    manager_llm=llm,
+    manager_llm=gpt4,
     verbose=2
 )
 

@@ -1,9 +1,12 @@
 from crewai import Task
-from file_io import save_markdown
+import datetime
 
 class BloggerTasks():
     # def content_strategy_task(self, agent, topic):    
     def content_strategy_task(self, agent):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        content_strategy_file = f"output_files/content_strategy_{timestamp}.md"
+
         return Task(
             description="""Work with the researcher to find a trending topic for a blog post and develop a content strategy.""",
             agent=agent,            
@@ -18,12 +21,12 @@ class BloggerTasks():
                 - Message 1...\\n
                 - Message 2...\\n\\n'
             """,
-            callback=save_markdown
+            output_file=content_strategy_file
         )
 
     def research_and_write_task(self, agent, context):
         return Task(
-            description='Research and write the blog post based on the content strategy.',
+            description="""Research and write the blog post based on the content strategy.""",
             agent=agent,
             context=context,
             expected_output="""A well-researched and engaging blog post in simple markdown format, following the content strategy.
@@ -38,8 +41,11 @@ class BloggerTasks():
         )
 
     def edit_post_task(self, agent, context):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        final_draft_file = f"output_files/final_draft_{timestamp}.md"
+
         return Task(
-            description='Edit the blog post for clarity, grammar, style, and coherence',
+            description="""Edit the blog post for clarity, grammar, style, and coherence""",
             agent=agent,
             context=context,
             expected_output="""An edited version of the blog post in markdown format, with improvements in clarity, grammar, style, and coherence.
@@ -51,12 +57,12 @@ class BloggerTasks():
                 ## {Updated Subheading 2}\\n\\n
                 {Updated content for subheading 2...}\\n\\n'
             """,
-            callback=save_markdown
+            output_file=final_draft_file
         )
 
     def build_blog_post_task(self, agent, context):
         return Task(
-            description='Build the blog post in the content management system',
+            description="""Build the blog post in the content management system""",
             agent=agent,
             context=context,
             expected_output="""A blog post built in the content management system, including text, images, links, and formatting.
@@ -70,7 +76,7 @@ class BloggerTasks():
 
     def publish_post_task(self, agent, context):
         return Task(
-            description='Publish the blog post on the website',
+            description="""Publish the blog post on the website""",
             agent=agent,
             context=context,
             expected_output="""A published blog post on the website, with a URL and metadata for search engines.
@@ -83,7 +89,7 @@ class BloggerTasks():
 
     def optimize_post_task(self, agent, context):
         return Task(
-            description='Optimize the blog post for search engines',
+            description="""Optimize the blog post for search engines""",
             agent=agent,
             context=context,
             expected_output="""An SEO-optimized version of the blog post in markdown format, with suggested keywords and meta descriptions.
@@ -101,6 +107,7 @@ class BloggerTasks():
                 The style should be consistent across all images generated for the blog post""",
             agent=agent,
             context=context,
+            async_execution=True,
             expected_output="""A list of image URLs or base64-encoded images that are relevant to the blog post content.
                 Example Output:
                 [
@@ -112,10 +119,14 @@ class BloggerTasks():
         )
 
     def plan_social_media_promotion_task(self, agent, context):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        social_media_plan_file = f"output_files/social_media_plan_{timestamp}.md"
+
         return Task(
-            description='Plan the promotion of the blog post on social media',
+            description="""Plan the promotion of the blog post on social media""",
             agent=agent,
             context=context,
+            async_execution=True,
             expected_output="""A markdown-formatted social media promotion plan, including platform-specific post content and hashtags.
                 Example Output:
                 '## Social Media Promotion Plan\\n\\n
@@ -128,5 +139,6 @@ class BloggerTasks():
                 **LinkedIn:**\\n
                 - Post 1: {LinkedIn post content}\\n
                 - Post 2: {LinkedIn post content}\\n\\n'
-            """
+            """,
+            output_file=social_media_plan_file
         )

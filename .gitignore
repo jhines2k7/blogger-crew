@@ -3,3 +3,4 @@
 .python-version
 __pycache__
 tools/__pycache__
+output_files
