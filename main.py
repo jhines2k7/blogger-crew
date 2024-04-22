@@ -1,17 +1,17 @@
 from crewai import Crew, Process
-from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
 from agents import BloggerCrewAgents
 from tasks import BloggerTasks
-
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Initialize the agents and tasks
 agents = BloggerCrewAgents()
 tasks = BloggerTasks()
 
-llm = ChatAnthropic(
-    model="claude-3-opus-20240229"
+llm = ChatOpenAI(
+    model="gpt-4-turbo"
 )
 
 # Instantiate the agents
@@ -19,16 +19,23 @@ content_strategist = agents.content_strategist_agent()
 writer = agents.writer_agent()
 editor = agents.editor_agent()
 researcher = agents.researcher_agent()
-# project_manager_agent = agents.project_manager_agent()
+social_media_manager = agents.social_media_manager_agent()
+visual_media_agent = agents.visual_media_agent()
 
 # Instantiate the tasks
 content_strategy_task = tasks.content_strategy_task(content_strategist)
 research_and_write_task = tasks.research_and_write_task(writer, [content_strategy_task])
 edit_post_task = tasks.edit_post_task(editor, [research_and_write_task])
+plan_social_media_promotion_task = tasks.plan_social_media_promotion_task(social_media_manager, [edit_post_task])
+provide_visuals_task = tasks.provide_visuals_task(visual_media_agent, [edit_post_task])
 
 crew = Crew(
-    agents=[content_strategist, writer, researcher, editor],
-    tasks=[content_strategy_task, research_and_write_task, edit_post_task],
+    agents=[content_strategist, writer, researcher, editor, social_media_manager, visual_media_agent],
+    tasks=[content_strategy_task, 
+           research_and_write_task, 
+           edit_post_task, 
+           plan_social_media_promotion_task, 
+           provide_visuals_task],
     process=Process.hierarchical,
     manager_llm=llm,
     verbose=2

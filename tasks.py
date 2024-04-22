@@ -1,11 +1,10 @@
-from datetime import datetime
 from crewai import Task
+from file_io import save_markdown
 
 class BloggerTasks():
     # def content_strategy_task(self, agent, topic):    
     def content_strategy_task(self, agent):
         return Task(
-            # description=f'Develop a content strategy for a blog post on the topic: "{topic}".',
             description="""Work with the researcher to find a trending topic for a blog post and develop a content strategy.""",
             agent=agent,            
             expected_output="""A markdown-formatted content strategy, including target audience, key themes, and messages. 
@@ -18,7 +17,8 @@ class BloggerTasks():
                 **Key Messages:**\\n
                 - Message 1...\\n
                 - Message 2...\\n\\n'
-            """
+            """,
+            callback=save_markdown
         )
 
     def research_and_write_task(self, agent, context):
@@ -26,7 +26,7 @@ class BloggerTasks():
             description='Research and write the blog post based on the content strategy.',
             agent=agent,
             context=context,
-            expected_output="""A well-researched and engaging blog post in markdown format, following the content strategy.
+            expected_output="""A well-researched and engaging blog post in simple markdown format, following the content strategy.
                 Example Output:
                 '# {Blog Post Title}\\n\\n
                 {Blog post content...}\\n\\n
@@ -50,7 +50,8 @@ class BloggerTasks():
                 {Updated content for subheading 1...}\\n\\n
                 ## {Updated Subheading 2}\\n\\n
                 {Updated content for subheading 2...}\\n\\n'
-            """
+            """,
+            callback=save_markdown
         )
 
     def build_blog_post_task(self, agent, context):
@@ -96,7 +97,8 @@ class BloggerTasks():
 
     def provide_visuals_task(self, agent, context):
         return Task(
-            description='Provide original photographs or illustrations for the blog post',
+            description="""Provide 3 original photographs or illustrations for the blog post. 
+                The style should be consistent across all images generated for the blog post""",
             agent=agent,
             context=context,
             expected_output="""A list of image URLs or base64-encoded images that are relevant to the blog post content.

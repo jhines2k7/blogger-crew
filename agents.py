@@ -1,5 +1,15 @@
 from crewai import Agent
 from tools.research_tool import ResearchTool
+from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
+from langchain.tools import Tool
+
+dalle = DallEAPIWrapper()
+
+dalle_tool = Tool(
+    name="Generate Images with DALL-E",
+    description="Generate images using the DALL-E API.",
+    func=dalle.run
+)
 
 class BloggerCrewAgents():
     def content_strategist_agent(self):
@@ -31,8 +41,8 @@ class BloggerCrewAgents():
             goal='Research and write the blog post',
             backstory="""As a skilled wordsmith, you craft compelling narratives that captivate readers, ensuring
             the content is well-researched, engaging, and tailored to the audience. When collaborating with the researcher, you
-            try to be specific about the topic you want to research""",
-            tools=[],
+            try to be specific about the topic you want to research. You can also ask the researcher to provide you with a 
+            summary of the research done so far.""",
             verbose=True,
             allow_delegation=True,
         )
@@ -59,14 +69,16 @@ class BloggerCrewAgents():
             allow_delegation=True,
         )
 
-    def photographer_illustrator_agent(self):
+    def visual_media_agent(self):
         return Agent(
-            role='PhotographerIllustrator',
+            role='VisualMediaArtist',
             goal='Provide original photographs or illustrations for the blog post',
             backstory="""As a visual artist, you capture or create unique images that enrich the content, giving it
-            a distinctive look and feel that sets it apart.""",
+            a distinctive look and feel that sets it apart. You collaborate with the writer to understand the content and 
+            provide relevant images. You can also ask the writer to provide you with a summary of the content to be illustrated.""",
             verbose=True,
             allow_delegation=True,
+            tools=[dalle_tool]
         )
 
     def social_media_manager_agent(self):
