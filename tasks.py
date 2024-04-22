@@ -2,11 +2,12 @@ from datetime import datetime
 from crewai import Task
 
 class BloggerTasks():
-    def content_strategy_task(self, agent, topic):
+    # def content_strategy_task(self, agent, topic):    
+    def content_strategy_task(self, agent):
         return Task(
-            description=f'Develop a content strategy for a blog post on the topic: "{topic}"',
-            agent=agent,
-            async_execution=True,
+            # description=f'Develop a content strategy for a blog post on the topic: "{topic}".',
+            description="""Work with the researcher to find a trending topic for a blog post and develop a content strategy.""",
+            agent=agent,            
             expected_output="""A markdown-formatted content strategy, including target audience, key themes, and messages. 
                 Example Output:
                 '## Content Strategy for "{topic}"\\n\\n
@@ -22,9 +23,8 @@ class BloggerTasks():
 
     def research_and_write_task(self, agent, context):
         return Task(
-            description='Research and write the blog post based on the content strategy',
+            description='Research and write the blog post based on the content strategy.',
             agent=agent,
-            async_execution=True,
             context=context,
             expected_output="""A well-researched and engaging blog post in markdown format, following the content strategy.
                 Example Output:
