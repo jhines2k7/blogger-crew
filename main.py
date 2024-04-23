@@ -24,26 +24,30 @@ researcher = agents.researcher()
 social_media_manager = agents.social_media_manager()
 photographer = agents.photographer()
 seo_specialist = agents.seo_specialist()
+web_developer = agents.web_developer()
 
 # Instantiate the tasks
-content_strategy_task = tasks.content_strategy_task(content_strategist)
-research_and_write_task = tasks.research_and_write_task(writer, [content_strategy_task])
-edit_post_task = tasks.edit_post_task(editor, [research_and_write_task])
-social_media_plan_task = tasks.social_media_plan_task(social_media_manager, [edit_post_task])
-photography_task = tasks.photography_task(photographer, [edit_post_task])
-seo_optimization_task = tasks.seo_optimization_task(seo_specialist, [edit_post_task])
+develop_content_strategy = tasks.develop_content_strategy(content_strategist)
+write_blog_post = tasks.write_blog_post(writer, [develop_content_strategy])
+edit_blog_post = tasks.edit_blog_post(editor, [write_blog_post])
+develop_social_media_plan = tasks.develop_social_media_plan(social_media_manager, [edit_blog_post])
+source_photography = tasks.source_photography(photographer, [edit_blog_post])
+optimize_for_search = tasks.optimize_for_search(seo_specialist, [edit_blog_post])
+convert_to_html = tasks.convert_to_html(web_developer, [optimize_for_search, source_photography])
 
 crew = Crew(
     agents=[content_strategist, writer, researcher, editor, social_media_manager, photographer, seo_specialist],
-    tasks=[content_strategy_task, 
-           research_and_write_task, 
-           edit_post_task, 
-           social_media_plan_task, 
-           photography_task,
-           seo_optimization_task],
+    tasks=[develop_content_strategy, 
+           write_blog_post, 
+           edit_blog_post,
+           develop_social_media_plan, 
+           source_photography,
+           optimize_for_search,
+           convert_to_html],
     process=Process.hierarchical,
     manager_llm=claude3,
-    verbose=2
+    verbose=2,
+    max_rpm=2
 )
 
 # clear the output_files directory

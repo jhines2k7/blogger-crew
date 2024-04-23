@@ -3,7 +3,7 @@ import datetime
 
 class BloggerTasks():
     # def content_strategy_task(self, agent, topic):    
-    def content_strategy_task(self, agent):
+    def develop_content_strategy(self, agent):
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         content_strategy_file = f"output_files/content_strategy_{timestamp}.md"
 
@@ -24,12 +24,13 @@ class BloggerTasks():
             output_file=content_strategy_file
         )
 
-    def research_and_write_task(self, agent, context):
+    def write_blog_post(self, agent, context):
         return Task(
             description="""Research and write the blog post based on the content strategy.""",
             agent=agent,
             context=context,
-            expected_output="""A well-researched and engaging blog post in simple markdown format, following the content strategy.
+            expected_output="""A well-researched and engaging blog post in simple markdown format, following the content strategy
+            Please write enough content to fill 6 paragraphs.
                 Example Output:
                 '# {Blog Post Title}\\n\\n
                 {Blog post content...}\\n\\n
@@ -40,7 +41,7 @@ class BloggerTasks():
             """
         )
 
-    def edit_post_task(self, agent, context):
+    def edit_blog_post(self, agent, context):
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         final_draft_file = f"output_files/final_draft_{timestamp}.md"
 
@@ -58,23 +59,105 @@ class BloggerTasks():
                 {Updated content for subheading 2...}\\n\\n'
             """,
             output_file=final_draft_file
-        )
+        )    
 
-    def build_blog_post_task(self, agent, context):
+    def convert_to_html(self, agent, context):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        blog_post_html_file = f"output_files/blog_post_{timestamp}.html"
+
         return Task(
-            description="""Build the blog post in the content management system""",
+            description="""You will be given the final draft of a blog post in markdown format. 
+                Build the markup for the blog post including text, images, links, and formatting.
+                Do not attempt to reconstruct an entire index.html page. The resulting HTML should 
+                be a fragment that can be inserted into an existing page. Be sure to use the image 
+                urls that are provided from the photographer. There should be 4 images in total. If 
+                there are not, feel free to repeat as many images as needed.Don't forget to grab 
+                some text from the draft to use in the blockquote""",
             agent=agent,
             context=context,
-            expected_output="""A blog post built in the content management system, including text, images, links, and formatting.
+            expected_output="""The markup for the blog post, including text, images, links, and formatting.
+                The resulting HTML should be a fragment that can be inserted into an existing page.
                 Example Output:
-                '## {Blog Post Title}\\n\\n
-                {Blog post content...}\\n\\n
-                ![Image 1](https://example.com/image1.jpg)\\n\\n
-                [Link 1](https://example.com/link1)\\n\\n'
-            """
+                <div class="entry-content">
+                    <p>Adipiscing elit com-modo ligula eget dolor Morlem ipsuim dolor sit amiet nec, isc
+                        thua sdfk onsec tetuer adipi scing elit. Aenean commeod ligula eget dolor Cuem
+                        sociis thena toquhte thigp enatibus et magnis dis partu rient montes. Morlem ipsum
+                        doelor sit amet nec penatib et thjem agnis dis part urient montes. Morlem ipsum
+                        dolor sit amet nerc, conseec tetuer adipiscing elit. Aenean commodo ligulaits eget
+                        dolior. Aenean type massa. Cum sociis nato que pena tibus et magnis dis partu rient
+                        moentes. Morlm ipsum dolor tibushrde set amet nec, consec tetuer adipiscing elit.
+                        Aenean commodo ligula eget dolor.</p>
+                    <p>Enatibus et magnis dis partu rient montes. Morlem ipsum doelor sit amet nec penatib
+                        et thjem agnis dis part uriet montes. Morlem ipsium dolor sit amet nerc, conseec
+                        tetuer adipi scing elit. Aenean commodo ligulaits eget doilior. Aenean type massa.
+                        Cum sociis nato que pena tibus et magns dihtres partu rient moentes. Morlm ipsum
+                        dolor set amet nec, consec tetuer adipiscing elit. Aenean comiodo ligula eget dolor.
+                        magnis dis partu rient moentes. Morlm ipsum dolor set am nec, consec tetuer
+                        adipiscing elit</p>
+                    <div class="row image-group gutters-20">
+                        <div class="col-lg-6 col-md-6">
+                            <figure class="thumb">
+                                <img src="assets/images/post/single/one/1.jpg" alt="Img">
+                            </figure>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <figure class="thumb">
+                                <img src="assets/images/post/single/one/2.jpg" alt="Img">
+                            </figure>
+                        </div>
+                    </div>
+                    <!--~./ end image group ~-->
+                    <p>Enatibus et magnis dis partu rient montes. Morlem ipsum doelor sit amet nec penatib
+                        et thjem agnis dis part uriet montes. Morlem ipsium dolor sit amet nerc, conseec
+                        tetuer adipi scing elit. Aenean commodo ligulaits eget doilior. Aenean type massa.
+                        Cum sociis nato que pena tibus et magns dihtres partu rient moentes. Morlm ipsum
+                        dolor set amet nec, consec tetuer adipiscing elit. Aenean comiodo ligula eget dolor.
+                        magnis dis partu rient moentes. Morlm ipsum dolor set am nec, consec tetuer
+                        adipiscing elit</p>
+                    <figure class="thumb full-image">
+                        <img src="assets/images/post/single/one/3.jpg" alt="Img">
+                    </figure>
+                    <p>Enatibus et magnis dis partu rient montes. Morlem ipsum doelor sit amet nec penatib
+                        et thjem agnis dis part uriet montes. Morlem ipsium dolor sit amet nerc, conseec
+                        tetuer adipi scing elit. Aenean commodo ligulaits eget doilior. Aenean type massa.
+                        Cum sociis nato que pena tibus et magns dihtres partu rient moentes. Morlm ipsum
+                        dolor set amet nec, consec tetuer adipiscing elit. Aenean comiodo ligula eget dolor.
+                        magnis dis partu rient moentes. Morlm ipsum dolor set am nec, consec tetuer
+                        adipiscing elit</p>
+                    <div class="left-thumb">
+                        <img height="401px" width="440px" class="alignleft" src="assets/images/post/single/one/4.jpg" alt="Img">
+                        <p>Enatibus et magnis dis partu rient montes. Morlem ipsum doelor sit amet nec
+                            penatib
+                            et thjem agnis dis part uriet montes. Morlem ipsium dolor sit amet nerc, conseec
+                            tetuer adipi scing elit. Aenean commodo ligulaits eget doilior. Aenean type
+                            massa.
+                            Cum sociis nato que pena tibus et magns dihtres partu rient moentes. Morlm ipsum
+                            dolor set amet nec, consec tetuer adipiscing elit. Aenean comiodo ligula eget
+                            dolor.
+                            magnis dis partu rient moentes. Morlm ipsum dolor set am nec, consec tetuer
+                            adipiscing elit</p>
+                    </div>
+
+                    <blockquote>
+                        <div class="quote"><img src="assets/images/icon/quote.png" alt="Quote"></div>
+                        <p>Enatibus et magnis dis partu rient montes. Morlem ipsum doelor sit amet nec
+                            penatib et thjem agnis dis part uriet montes. Morlem ipsium dolor sit amet nerc,
+                            conseec tetuer adipi scing elit. Aenean commodo ligulaits</p>
+                    </blockquote>
+
+                    <p>Enatibus et magnis dis partu rient montes. Morlem ipsum doelor sit amet nec penatib
+                        et thjem agnis dis part uriet montes. Morlem ipsium dolor sit amet nerc, conseec
+                        tetuer adipi scing elit. Aenean commodo ligulaits eget doilior. Aenean type massa.
+                        Cum sociis nato que pena tibus et magns dihtres partu rient moentes. Morlm ipsum
+                        dolor set amet nec, consec tetuer adipiscing elit. Aenean comiodo ligula eget dolor.
+                        magnis dis partu rient moentes. Morlm ipsum dolor set am nec, consec tetuer
+                        adipiscing elit</p>
+                </div>
+            """,
+            output_file=blog_post_html_file
         )
 
-    def publish_post_task(self, agent, context):
+    def publish_blog_post(self, agent, context):
         return Task(
             description="""Publish the blog post on the website""",
             agent=agent,
@@ -87,7 +170,7 @@ class BloggerTasks():
             """
         )
 
-    def seo_optimization_task(self, agent, context):
+    def optimize_for_search(self, agent, context):
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         seo_optimized_file = f"output_files/seo_optimized_{timestamp}.md"
         
@@ -105,12 +188,12 @@ class BloggerTasks():
             output_file=seo_optimized_file
         )
 
-    def photography_task(self, agent, context):
+    def source_photography(self, agent, context):
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         image_url_file = f"output_files/image_urls_{timestamp}.md"
         
         return Task(
-            description="""Provide 3 original photographs for the blog post. 
+            description="""Provide 4 original photographs for the blog post. 
             The style should be consistent across all images generated for the blog post
             """,
             agent=agent,
@@ -127,7 +210,7 @@ class BloggerTasks():
             output_file=image_url_file
         )
 
-    def social_media_plan_task(self, agent, context):
+    def develop_social_media_plan(self, agent, context):
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         social_media_plan_file = f"output_files/social_media_plan_{timestamp}.md"
 

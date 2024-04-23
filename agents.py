@@ -114,7 +114,7 @@ class BloggerCrewAgents():
             allow_delegation=True,
             tools=[PhotographyTool.generate_image],
             llm=gpt4,
-            max_rpm=15
+            max_rpm=1
         )
 
     def social_media_manager(self):
@@ -134,9 +134,10 @@ class BloggerCrewAgents():
             role='WebDeveloper',
             goal='Handle the technical aspects of posting the content online',
             backstory="""With expertise in web technologies, you ensure the blog post is properly formatted and
-            displayed, and that the website's backend supports the new content.""",
+            displayed, and that the website's backend supports the new content. One of your primary roles is to
+            convert the blog post from markdown into html""",
             verbose=True,
             allow_delegation=True,
-            llm=llama3,
-            max_rpm=15
+            llm=gpt4,
+            max_rpm=1
         )
