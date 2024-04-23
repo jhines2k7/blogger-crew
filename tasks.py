@@ -87,7 +87,10 @@ class BloggerTasks():
             """
         )
 
-    def optimize_post_task(self, agent, context):
+    def seo_optimization_task(self, agent, context):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        seo_optimized_file = f"output_files/seo_optimized_{timestamp}.md"
+        
         return Task(
             description="""Optimize the blog post for search engines""",
             agent=agent,
@@ -98,10 +101,14 @@ class BloggerTasks():
                 {SEO-optimized blog post content...}\\n\\n
                 **Suggested Keywords:** keyword1, keyword2, keyword3\\n\\n
                 **Meta Description:** {SEO-optimized meta description}\\n\\n'
-            """
+            """,
+            output_file=seo_optimized_file
         )
 
     def photography_task(self, agent, context):
+        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        image_url_file = f"output_files/image_urls_{timestamp}.md"
+        
         return Task(
             description="""Provide 3 original photographs for the blog post. 
             The style should be consistent across all images generated for the blog post
@@ -115,10 +122,12 @@ class BloggerTasks():
                     'https://example.com/image2.png',
                     'data:image/jpeg;base64,...'
                 ]
-            """
+            """,
+            async_execution=True,
+            output_file=image_url_file
         )
 
-    def plan_social_media_promotion_task(self, agent, context):
+    def social_media_plan_task(self, agent, context):
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         social_media_plan_file = f"output_files/social_media_plan_{timestamp}.md"
 
@@ -139,5 +148,6 @@ class BloggerTasks():
                 - Post 1: {LinkedIn post content}\\n
                 - Post 2: {LinkedIn post content}\\n\\n'
             """,
+            async_execution=True,
             output_file=social_media_plan_file
         )

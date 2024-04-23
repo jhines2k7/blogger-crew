@@ -1,17 +1,10 @@
 from crewai import Agent
 from tools.research_tool import ResearchTool
+from tools.photography_tool import PhotographyTool
 from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
 from langchain.tools import Tool
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
-
-dalle = DallEAPIWrapper()
-
-dalle_tool = Tool(
-    name="Generate Images with DALL-E",
-    description="Generate images using the DALL-E API.",
-    func=dalle.run
-)
 
 llama3 = ChatGroq(
     model="llama3-70b-8192"
@@ -22,7 +15,7 @@ gpt4 = ChatOpenAI(
 )
 
 class BloggerCrewAgents():
-    def content_strategist_agent(self):
+    def content_strategist(self):
         return Agent(
             role='ContentStrategist',
             goal='Plan the overall content strategy for the blog post',
@@ -36,7 +29,7 @@ class BloggerCrewAgents():
             max_rpm=15
         )
 
-    def researcher_agent(self):
+    def researcher(self):
         return Agent(
             role='Researcher',
             goal='Conduct in-depth research on the blog post topic',
@@ -49,7 +42,7 @@ class BloggerCrewAgents():
             max_rpm=15
         )
 
-    def writer_agent(self):
+    def writer(self):
         return Agent(
             role='Writer',
             goal='Research and write the blog post',
@@ -63,7 +56,7 @@ class BloggerCrewAgents():
             max_rpm=15
         )
 
-    def editor_agent(self):
+    def editor(self):
         return Agent(
             role='Editor',
             goal='Review and edit the blog post for clarity, grammar, style, and coherence',
@@ -75,28 +68,28 @@ class BloggerCrewAgents():
             max_rpm=15
         )
 
-    def seo_specialist_agent(self):
+    def seo_specialist(self):
         return Agent(
             role='SEOSpecialist',
             goal='Optimize the blog post for search engines',
             backstory="""As an SEO expert, you leverage your knowledge of search engine algorithms to improve the
-            post's visibility, researching keywords and suggesting changes to boost rankings. When collaborating with the researcher, you
-            try to be specific about the topic you want to research""",
+            post's visibility, researching keywords and suggesting changes to boost rankings. When collaborating 
+            with the researcher and writer, you try to be specific about seo related information you want to research""",
             verbose=True,
             allow_delegation=True,
             llm=llama3,
             max_rpm=15
         )
 
-    def photographer_agent(self):
+    def photographer(self):
         return Agent(
             role='Photographer',
             goal='Provide original photographs for the blog post',
             backstory="""As a photographer, you capture or create unique images that enrich the content, giving it
             a distinctive look and feel that sets it apart. You collaborate with the writer to understand the content and 
-            provide relevant images. You can also ask the writer to provide you with a summary of the content to be illustrated.
-            Your prompts strive for photo realism when possible. Here a some examples of prompts you use to generate 
-            photorealistic images using AI image generators like Midjourney, DallE or Stable Diffusion:
+            provide relevant images. You can also ask the writer to provide you with a summary of the content to be shown.
+            Here a some examples of prompts you can use to generate images using AI image generators like 
+            Midjourney, DallE or Stable Diffusion:
 
                 1. A stunning aerial view of a tropical island with white sandy beaches, turquoise waters, and lush green palm trees, highly detailed, 8k resolution, photorealistic.
 
@@ -119,12 +112,12 @@ class BloggerCrewAgents():
             """,
             verbose=True,
             allow_delegation=True,
-            tools=[dalle_tool],
+            tools=[PhotographyTool.generate_image],
             llm=gpt4,
             max_rpm=15
         )
 
-    def social_media_manager_agent(self):
+    def social_media_manager(self):
         return Agent(
             role='SocialMediaManager',
             goal='Plan and execute the promotion of the blog post on social media',
@@ -136,7 +129,7 @@ class BloggerCrewAgents():
             max_rpm=15
         )
 
-    def web_developer_agent(self):
+    def web_developer(self):
         return Agent(
             role='WebDeveloper',
             goal='Handle the technical aspects of posting the content online',
