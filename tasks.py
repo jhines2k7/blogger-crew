@@ -30,7 +30,7 @@ class BloggerTasks():
         return Task(
             description="""
                 Research and write the blog post based on the content strategy. Keep in mind that our readers are
-                ravenous readers, so make sure to write enough content to fill at least 6 paragraphs. Remember to
+                ravenous readers, so make sure to write enough content to fill at least 8 paragraphs. Remember to
                 follow the content strategy and make the blog post engaging and informative.
             """,
             agent=agent,

@@ -36,8 +36,8 @@ class BloggerCrewAgents():
             tools=[ResearchTool.perform_research],
             verbose=True,
             allow_delegation=True,
-            llm=llama3,
-            max_rpm=15
+            llm=gpt4,
+            max_rpm=1
         )
 
     def writer(self):
@@ -111,8 +111,8 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             tools=[PhotographyTool.generate_image],
-            llm=llama3,
-            max_rpm=15
+            llm=gpt4,
+            max_rpm=1
         )
 
     def social_media_manager(self):
