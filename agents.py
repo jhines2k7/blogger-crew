@@ -24,7 +24,7 @@ class BloggerCrewAgents():
             verbose=True,
             max_iter=15,
             llm=llama3,
-            max_rpm=15
+            max_rpm=10000
         )
 
     def researcher(self):
@@ -37,7 +37,7 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             llm=gpt4,
-            max_rpm=1
+            max_rpm=10000
         )
 
     def writer(self):
@@ -51,7 +51,7 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             llm=llama3,
-            max_rpm=15
+            max_rpm=30
         )
 
     def editor(self):
@@ -63,7 +63,7 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             llm=llama3,
-            max_rpm=15
+            max_rpm=30
         )
 
     def seo_specialist(self):
@@ -76,7 +76,7 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             llm=llama3,
-            max_rpm=15
+            max_rpm=30
         )
 
     def photographer(self):
@@ -112,7 +112,7 @@ class BloggerCrewAgents():
             allow_delegation=True,
             tools=[PhotographyTool.generate_image],
             llm=gpt4,
-            max_rpm=1
+            max_rpm=30
         )
 
     def social_media_manager(self):
@@ -124,7 +124,7 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             llm=llama3,
-            max_rpm=15
+            max_rpm=30
         )
 
     def web_developer(self):
@@ -137,5 +137,5 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,            
             llm=gpt4,
-            max_rpm=1
+            max_rpm=10000
         )

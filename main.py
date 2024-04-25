@@ -56,7 +56,7 @@ crew = Crew(
     process=Process.hierarchical,
     manager_llm=gpt4,
     verbose=2,
-    max_rpm=2
+    max_rpm=10000
 )
 
 # clear the output_files directory
