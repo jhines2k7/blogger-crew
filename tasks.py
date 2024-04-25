@@ -26,7 +26,11 @@ class BloggerTasks():
 
     def write_blog_post(self, agent, context):
         return Task(
-            description="""Research and write the blog post based on the content strategy.""",
+            description="""
+                Research and write the blog post based on the content strategy. Keep in mind that our readers are
+                ravenous readers, so make sure to write enough content to fill at least 6 paragraphs. Remember to
+                follow the content strategy and make the blog post engaging and informative.
+            """,
             agent=agent,
             context=context,
             expected_output="""A well-researched and engaging blog post in simple markdown format, following the content strategy
@@ -71,7 +75,7 @@ class BloggerTasks():
                 Do not attempt to reconstruct an entire index.html page. The resulting HTML should 
                 be a fragment that can be inserted into an existing page. Be sure to use the image 
                 urls that are provided from the photographer. There should be 4 images in total. If 
-                there are not, feel free to repeat as many images as needed.Don't forget to grab 
+                there are not, feel free to repeat as many images as needed. Don't forget to grab 
                 some text from the draft to use in the blockquote""",
             agent=agent,
             context=context,
@@ -188,23 +192,26 @@ class BloggerTasks():
             output_file=seo_optimized_file
         )
 
-    def source_photography(self, agent, context):
+    def source_photographs(self, agent, context):        
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        image_url_file = f"output_files/image_urls_{timestamp}.md"
+        image_url_file = f"output_files/image_urls_{timestamp}.txt"
         
         return Task(
             description="""Provide 4 original photographs for the blog post. 
-            The style should be consistent across all images generated for the blog post
+            The style should be consistent across all images generated for 
+            the blog post. Take care to pass a file name along with the 
+            prompt when you use the tool to upload the base64 encoded image
+            to GCS. All files should be jpeg. Make sure the web developer knows 
+            the file with the public urls can be found at {image_url_file}
             """,
             agent=agent,
             context=context,
-            expected_output="""A list of image URLs or base64-encoded images that are relevant to the blog post content.
+            expected_output="""A line separated list of image URLs for the blog post.
                 Example Output:
-                [
-                    'https://example.com/image1.jpg',
-                    'https://example.com/image2.png',
-                    'data:image/jpeg;base64,...'
-                ]
+                    https://storage.googleapis.com/[BUCKET_NAME]/[FILE_NAME_1]
+                    https://storage.googleapis.com/[BUCKET_NAME]/[FILE_NAME_2]
+                    https://storage.googleapis.com/[BUCKET_NAME]/[FILE_NAME_3]
+                    https://storage.googleapis.com/[BUCKET_NAME]/[FILE_NAME_4]            
             """,
             async_execution=True,
             output_file=image_url_file

@@ -1,7 +1,7 @@
 import os
 
 from crewai import Crew, Process
-from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
 from agents import BloggerCrewAgents
 from tasks import BloggerTasks
 from dotenv import load_dotenv
@@ -12,8 +12,8 @@ load_dotenv()
 agents = BloggerCrewAgents()
 tasks = BloggerTasks()
 
-claude3 = ChatAnthropic(
-    model="claude-3-opus-20240229"
+gpt4 = ChatOpenAI(
+    model="gpt-4-turbo"
 )
 
 # Instantiate the agents
@@ -30,22 +30,31 @@ web_developer = agents.web_developer()
 develop_content_strategy = tasks.develop_content_strategy(content_strategist)
 write_blog_post = tasks.write_blog_post(writer, [develop_content_strategy])
 edit_blog_post = tasks.edit_blog_post(editor, [write_blog_post])
-develop_social_media_plan = tasks.develop_social_media_plan(social_media_manager, [edit_blog_post])
-source_photography = tasks.source_photography(photographer, [edit_blog_post])
-optimize_for_search = tasks.optimize_for_search(seo_specialist, [edit_blog_post])
-convert_to_html = tasks.convert_to_html(web_developer, [optimize_for_search, source_photography])
+develop_social_media_plan = tasks.develop_social_media_plan(social_media_manager, [edit_blog_post, develop_content_strategy])
+source_photographs = tasks.source_photographs(photographer, [edit_blog_post])
+optimize_for_search = tasks.optimize_for_search(seo_specialist, [edit_blog_post, develop_content_strategy])
+convert_to_html = tasks.convert_to_html(web_developer, [optimize_for_search, source_photographs])
 
 crew = Crew(
-    agents=[content_strategist, writer, researcher, editor, social_media_manager, photographer, seo_specialist],
+    agents=[
+        content_strategist, 
+        writer, 
+        researcher, 
+        editor, 
+        social_media_manager, 
+        photographer,
+        web_developer,
+        seo_specialist],
     tasks=[develop_content_strategy, 
            write_blog_post, 
            edit_blog_post,
-           develop_social_media_plan, 
-           source_photography,
+           develop_social_media_plan,
+           source_photographs,
            optimize_for_search,
-           convert_to_html],
+           convert_to_html
+           ],
     process=Process.hierarchical,
-    manager_llm=claude3,
+    manager_llm=gpt4,
     verbose=2,
     max_rpm=2
 )
