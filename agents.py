@@ -1,10 +1,6 @@
 from crewai import Agent
-from crewai_tools import FileReadTool
 from tools.research_tool import ResearchTool
 from tools.photography_tool import PhotographyTool
-from tools.gcs_image_upload_tool import GCSImageUploadTool
-from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
-from langchain.tools import Tool
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 
@@ -139,8 +135,7 @@ class BloggerCrewAgents():
             displayed, and that the website's backend supports the new content. One of your primary roles is to
             convert the blog post from markdown into html""",
             verbose=True,
-            allow_delegation=True,
-            tools=[FileReadTool()],
+            allow_delegation=True,            
             llm=llama3,
             max_rpm=15
         )

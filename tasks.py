@@ -1,4 +1,6 @@
 from crewai import Task
+from crewai_tools import FileReadTool
+
 import datetime
 
 class BloggerTasks():
@@ -158,7 +160,8 @@ class BloggerTasks():
                         adipiscing elit</p>
                 </div>
             """,
-            output_file=blog_post_html_file
+            output_file=blog_post_html_file,
+            tools=[FileReadTool(file_path='output_files/image_urls.txt')]
         )
 
     def publish_blog_post(self, agent, context):
@@ -193,16 +196,12 @@ class BloggerTasks():
         )
 
     def source_photographs(self, agent, context):        
-        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        image_url_file = f"output_files/image_urls_{timestamp}.txt"
-        
         return Task(
             description="""Provide 4 original photographs for the blog post. 
             The style should be consistent across all images generated for 
-            the blog post. Take care to pass a file name along with the 
-            prompt when you use the tool to upload the base64 encoded image
-            to GCS. All files should be jpeg. Make sure the web developer knows 
-            the file with the public urls can be found at {image_url_file}
+            the blog post. Take care to pass a descriptive and unique file 
+            name along with the prompt when you use the tool to upload the 
+            base64 encoded image to GCS. All files should be jpeg.
             """,
             agent=agent,
             context=context,
@@ -214,7 +213,7 @@ class BloggerTasks():
                     https://storage.googleapis.com/[BUCKET_NAME]/[FILE_NAME_4]            
             """,
             async_execution=True,
-            output_file=image_url_file
+            output_file='output_files/image_urls.txt'
         )
 
     def develop_social_media_plan(self, agent, context):
