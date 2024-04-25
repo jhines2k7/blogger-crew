@@ -136,6 +136,6 @@ class BloggerCrewAgents():
             convert the blog post from markdown into html""",
             verbose=True,
             allow_delegation=True,            
-            llm=llama3,
-            max_rpm=15
+            llm=gpt4,
+            max_rpm=1
         )
