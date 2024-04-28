@@ -8,3 +8,4 @@ output_files
 photographer.py
 gcs_test.py
 photo_test.py
+logs.txt

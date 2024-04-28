@@ -1,5 +1,5 @@
 from crewai import Agent
-from tools.research_tool import ResearchTool
+from tools.search_tool import SearchTool
 from tools.photography_tool import PhotographyTool
 from tools.cropping_tool import CroppingTool
 from langchain_groq import ChatGroq
@@ -11,36 +11,46 @@ llama3 = ChatGroq(
     model="llama3-70b-8192"
 )
 
+llama3_rpm = 30
+
 gpt4 = ChatOpenAI(
     model="gpt-4-turbo"
 )
+
+gpt4_rpm = 10000
 
 class BloggerCrewAgents():
     def content_strategist(self):
         return Agent(
             role='ContentStrategist',
             goal='Plan the overall content strategy for the blog post',
-            backstory=textwrap.dedent("""With a deep understanding of the target audience and a keen sense of what resonates, you
-            develop themes and messages that engage and inform readers. When collaborating with the researcher, you
-            try to be specific about the topic you want to research"""),
+            backstory=textwrap.dedent(
+                """
+                With a deep understanding of the target audience and a keen sense of what resonates, you
+                develop themes and messages that engage and inform readers. When collaborating with the researcher, you
+                try to be specific about the topic you want to research
+                """),
             allow_delegation=True,
             verbose=True,
             max_iter=15,
             llm=llama3,
-            max_rpm=10000
+            max_rpm=llama3_rpm
         )
 
     def researcher(self):
         return Agent(
             role='Researcher',
             goal='Conduct in-depth research on the blog post topic',
-            backstory=textwrap.dedent("""As a skilled researcher, you dive deep into the subject matter, gathering facts, statistics, and
-            expert opinions to provide a solid foundation for the blog post."""),
-            tools=[ResearchTool.perform_research],
+            backstory=textwrap.dedent(
+                """
+                As a skilled researcher, you dive deep into the subject matter, gathering facts, statistics, and
+                expert opinions to provide a solid foundation for the blog post.
+                """),
+            tools=[SearchTool.search_internet],
             verbose=True,
             allow_delegation=True,
-            llm=gpt4,
-            max_rpm=10000
+            llm=llama3,
+            max_rpm=llama3_rpm
         )
 
     def writer(self):
@@ -54,19 +64,22 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             llm=llama3,
-            max_rpm=30
+            max_rpm=llama3_rpm
         )
 
     def editor(self):
         return Agent(
             role='Editor',
             goal='Review and edit the blog post for clarity, grammar, style, and coherence',
-            backstory=textwrap.dedent("""With a sharp eye for detail and a commitment to quality, you refine the content, ensuring
-            it meets the overall strategy and maintains the highest standards."""),
+            backstory=textwrap.dedent(
+                """
+                With a sharp eye for detail and a commitment to quality, you refine the content, ensuring
+                it meets the overall strategy and maintains the highest standards.
+                """),
             verbose=True,
             allow_delegation=True,
             llm=llama3,
-            max_rpm=30
+            max_rpm=llama3_rpm
         )
 
     def seo_specialist(self):
@@ -82,7 +95,7 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             llm=llama3,
-            max_rpm=30
+            max_rpm=llama3_rpm
         )
 
     def photographer(self):
@@ -94,35 +107,16 @@ class BloggerCrewAgents():
                 As a photographer, you capture or create unique images that enrich the content, giving it
                 a distinctive look and feel that sets it apart. You collaborate with the writer to understand the content and 
                 provide relevant images. You can also ask the writer to provide you with a summary of the content to be shown.
-                Here a some examples of prompts you can use to generate images using AI image generators like 
-                Midjourney, DallE or Stable Diffusion:
-
-                    1. A stunning aerial view of a tropical island with white sandy beaches, turquoise waters, and lush green palm trees, highly detailed.
-
-                    2. Portrait of a wise old man with wrinkles, grey hair, and a long beard, wearing a traditional tunic, soft lighting, highly detailed skin texture style.
-
-                    3. An elegant black horse galloping through a field of tall grass with mountains in the background, golden hour lighting, highly detailed fur and grass.
-
-                    4. Close-up of a red rose with dew drops on the petals, black background, studio lighting, highly detailed.
-
-                    5. A cozy log cabin in a snowy forest, warm light glowing from the windows, highly detailed wood texture and snow style.
-
-                    6. Vintage 1950s American diner with neon signs, chrome details, and red leather booths, highly detailed.
-
-                    7. Majestic grey wolf standing on a rocky cliff overlooking a misty valley at dawn, highly detailed fur and rock texture.
-
-                    8. Close-up of a human eye with intricate details of the iris, eyelashes, and skin texture, studio lighting.
-
-                Remember to keep the prompt descriptive and specific. Including details about the subject, setting, lighting, textures, and 
-                style can help achieve what we're looking for. Avoid using terms like "photorealistic" in your prompts, as DALL·E interprets 
-                these as a style of art rather than a descriptor of a photograph. Incorporating details such as camera settings, lens type, 
-                and lighting conditions in your prompts can help generate better photos
-            """),
+                Remember to keep the prompt descriptive and specific.Avoid using terms like "photorealistic" in your 
+                prompts, as DALL·E interprets these as a style of art rather than a descriptor of a photograph. Incorporating 
+                details such as camera settings, lens type, and lighting conditions, textures, and style in your prompts can 
+                help generate better photos.
+                """),
             verbose=True,
             allow_delegation=True,
             tools=[PhotographyTool.generate_image, CroppingTool.crop_image],
             llm=gpt4,
-            max_rpm=10000
+            max_rpm=gpt4_rpm
         )
 
     def social_media_manager(self):
@@ -137,7 +131,7 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             llm=llama3,
-            max_rpm=30
+            max_rpm=llama3_rpm
         )
 
     def web_developer(self):
@@ -152,21 +146,6 @@ class BloggerCrewAgents():
                 """),
             verbose=True,
             allow_delegation=True,            
-            llm=gpt4,
-            max_rpm=10000
-        )
-    
-    def web_designer(self):
-        return Agent(
-            role='WebDesigner',
-            goal='Design and enhance the visual elements of the blog post',
-            backstory=textwrap.dedent(
-                """
-                As a web designer, you create the visual elements that enhance the user experience and
-                convey the brand's identity.
-                """),
-            verbose=True,
-            allow_delegation=True,
-            llm=gpt4,
-            max_rpm=10000
+            llm=llama3,
+            max_rpm=llama3_rpm
         )

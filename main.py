@@ -25,17 +25,17 @@ social_media_manager = agents.social_media_manager()
 photographer = agents.photographer()
 seo_specialist = agents.seo_specialist()
 web_developer = agents.web_developer()
-web_designer = agents.web_designer()
 
 # Instantiate the tasks
 develop_content_strategy = tasks.develop_content_strategy(content_strategist)
-write_blog_post = tasks.write_blog_post(writer, [develop_content_strategy])
-edit_blog_post = tasks.edit_blog_post(editor, [write_blog_post])
+create_keyword_targeting_report = tasks.create_keyword_targeting_report(seo_specialist, [develop_content_strategy])
+create_seo_content_brief = tasks.create_seo_content_brief(seo_specialist, [develop_content_strategy])
+write_blog_post = tasks.write_blog_post(writer, [develop_content_strategy, create_keyword_targeting_report, create_seo_content_brief])
+edit_blog_post = tasks.edit_blog_post(editor, [develop_content_strategy, write_blog_post])
 develop_social_media_plan = tasks.develop_social_media_plan(social_media_manager, [edit_blog_post, develop_content_strategy])
 source_photographs = tasks.source_photographs(photographer, [edit_blog_post])
-crop_images = tasks.crop_images(web_designer, [source_photographs])
-optimize_for_search = tasks.optimize_for_search(seo_specialist, [edit_blog_post, develop_content_strategy])
-convert_to_html = tasks.convert_to_html(web_developer, [optimize_for_search, crop_images])
+crop_images = tasks.crop_images(photographer, [source_photographs])
+convert_to_html = tasks.convert_to_html(web_developer, [edit_blog_post, crop_images])
 
 crew = Crew(
     agents=[
@@ -46,20 +46,22 @@ crew = Crew(
         social_media_manager, 
         photographer,
         web_developer,
-        seo_specialist,
-        web_designer],
-    tasks=[develop_content_strategy, 
-           write_blog_post, 
-           edit_blog_post,
-           develop_social_media_plan,
-           source_photographs,
-           crop_images,
-           optimize_for_search,
-           convert_to_html],
+        seo_specialist],
+    tasks=[
+        develop_content_strategy,
+        create_keyword_targeting_report,
+        create_seo_content_brief,
+        write_blog_post, 
+        edit_blog_post,
+        develop_social_media_plan,
+        source_photographs,
+        crop_images,
+        convert_to_html],
     process=Process.hierarchical,
     manager_llm=gpt4,
     verbose=2,
-    max_rpm=10000
+    max_rpm=10000,
+    output_log_file=True
 )
 
 # clear the output_files directory
@@ -69,6 +71,9 @@ for filename in os.listdir(directory):
     if os.path.isfile(file_path):
         os.remove(file_path)
         print(f"{file_path} has been deleted.")
+
+os.remove("logs.txt")
+print("logs.txt has been deleted.")
         
 # Kick off the crew's work
 results = crew.kickoff()

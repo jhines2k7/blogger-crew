@@ -6,8 +6,7 @@ import textwrap
 
 class BloggerTasks():
     def develop_content_strategy(self, agent):
-        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        content_strategy_file = f"output_files/content_strategy_{timestamp}.md"
+        content_strategy_file = f"output_files/content_strategy.md"
 
         return Task(
             description=textwrap.dedent(
@@ -36,54 +35,47 @@ class BloggerTasks():
         return Task(
             description=textwrap.dedent(
                 """
-                    Research and write the blog post based on the content strategy. Keep in mind that our readers are
-                    ravenous readers, so make sure to write enough content to fill at least 8 paragraphs. Remember to
-                    follow the content strategy and make the blog post engaging and informative.
+                    Research and write the blog post based on the content strategy.The expected wordcount for
+                    this blog post is between 1000-1200 words. Remember to follow the content strategy and make 
+                    the blog post engaging and informative.
                 """),
             agent=agent,
             context=context,
             expected_output=textwrap.dedent(
                 """
-                    A well-researched and engaging blog post in simple markdown format, following the content strategy
-                    Example Output:
-                    '# {Blog Post Title}\\n\\n
-                    {Blog post content...}\\n\\n
-                    ## {Subheading 1}\\n\\n
-                    {Content for subheading 1...}\\n\\n
-                    ## {Subheading 2}\\n\\n
-                    {Content for subheading 2...}\\n\\n'
-                """)
+                    A well-researched and engaging blog post following the content strategy in plain text format.
+                """),
+            tools=[
+                FileReadTool(file_path='output_files/keyword_targeting_report.md'),
+                FileReadTool(file_path='output_files/seo_content_brief.md')
+            ],
+            output_file='output_files/blog_post_draft.txt'
         )
 
     def edit_blog_post(self, agent, context):
-        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        final_draft_file = f"output_files/final_draft_{timestamp}.md"
+        final_draft_file = f"output_files/final_draft.txt"
 
         return Task(
             description="""Edit the blog post for clarity, grammar, style, and coherence""",
             agent=agent,
             context=context,
-            expected_output=textwrap.dedent("""An edited version of the blog post in markdown format, with improvements in clarity, grammar, style, and coherence.
-                Example Output:
-                '# {Updated Blog Post Title}\\n\\n
-                {Updated blog post content...}\\n\\n
-                ## {Updated Subheading 1}\\n\\n
-                {Updated content for subheading 1...}\\n\\n
-                ## {Updated Subheading 2}\\n\\n
-                {Updated content for subheading 2...}\\n\\n'
-            """),
-            output_file=final_draft_file
+            expected_output=textwrap.dedent(
+                """
+                    An edited version of the blog post in plain text format, with improvements in clarity, grammar, style, and coherence.
+                """),
+            output_file=final_draft_file,
+            tools=[FileReadTool(file_path='output_files/blog_post_draft.txt')]
         )    
 
     def convert_to_html(self, agent, context):
         timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        blog_post_html_file = f"output_files/blog_post_{timestamp}.html"
+        blog_post_html_file = f"output_files/blog_post-{timestamp}.html"
 
         return Task(
             description=textwrap.dedent(
                 """
-                    You will be given the final draft of a blog post in markdown format. 
-                    Build the markup for the blog post including text, images, links, and formatting.
+                    Take the content from the final draft of the blog post, and use it to the build the 
+                    markup for the blog post including text, images, links, and formatting.
                     Do not attempt to reconstruct an entire index.html page. The resulting HTML should 
                     be a fragment that can be inserted into an existing page. The image urls will be
                     be available to you in a text file called cropped_image_urls.txt. There should be 
@@ -180,38 +172,10 @@ class BloggerTasks():
                     </div>
                 """),
             output_file=blog_post_html_file,
-            tools=[FileReadTool(file_path='output_files/cropped_image_urls.txt')]
-        )
-
-    def publish_blog_post(self, agent, context):
-        return Task(
-            description="""Publish the blog post on the website""",
-            agent=agent,
-            context=context,
-            expected_output=textwrap.dedent("""A published blog post on the website, with a URL and metadata for search engines.
-                Example Output:
-                'Published: {Blog Post Title}\\n
-                URL: https://example.com/blog-post\\n
-                Meta Description: {Meta description for search engines}\\n'
-            """)
-        )
-
-    def optimize_for_search(self, agent, context):
-        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        seo_optimized_file = f"output_files/seo_optimized_{timestamp}.md"
-        
-        return Task(
-            description="""Optimize the blog post for search engines""",
-            agent=agent,
-            context=context,
-            expected_output=textwrap.dedent("""An SEO-optimized version of the blog post in markdown format, with suggested keywords and meta descriptions.
-                Example Output:
-                '# {SEO-Optimized Blog Post Title}\\n\\n
-                {SEO-optimized blog post content...}\\n\\n
-                **Suggested Keywords:** keyword1, keyword2, keyword3\\n\\n
-                **Meta Description:** {SEO-optimized meta description}\\n\\n'
-            """),
-            output_file=seo_optimized_file
+            tools=[
+                FileReadTool(file_path='output_files/cropped_image_urls.txt'), 
+                FileReadTool(file_path='output_files/final_draft.txt')
+            ]
         )
 
     def source_photographs(self, agent, context):        
@@ -266,14 +230,14 @@ class BloggerTasks():
         )
 
     def develop_social_media_plan(self, agent, context):
-        timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        social_media_plan_file = f"output_files/social_media_plan_{timestamp}.md"
+        social_media_plan_file = f"output_files/social_media_plan.md"
 
         return Task(
             description="""Plan the promotion of the blog post on social media""",
             agent=agent,
             context=context,
-            expected_output=textwrap.dedent("""A markdown-formatted social media promotion plan, including platform-specific post content and hashtags.
+            expected_output=textwrap.dedent(
+                """A markdown-formatted social media promotion plan, including platform-specific post content and hashtags.
                 Example Output:
                 '## Social Media Promotion Plan\\n\\n
                 **Twitter:**\\n
@@ -285,7 +249,45 @@ class BloggerTasks():
                 **LinkedIn:**\\n
                 - Post 1: {LinkedIn post content}\\n
                 - Post 2: {LinkedIn post content}\\n\\n'
-            """),
+                """),
             async_execution=True,
             output_file=social_media_plan_file
         )
+
+    def create_keyword_targeting_report(self, agent, context):
+        return Task(
+            description="""Create a keyword targeting report for the blog post""",
+            agent=agent,
+            context=context,
+            expected_output=textwrap.dedent(
+                """ This report should include the primary and secondary keywords that the blog post should target. 
+                It provides the author with crucial insights into the focus topics and phrases that are expected to drive traffic..
+                Example Output:
+                '## Keyword Targeting Report for "{Blog Post Title}"\\n\\n
+                **Suggested Keywords:** keyword1, keyword2, keyword3\\n\\n
+                **Search Volume:** {Search volume for suggested keywords}\\n\\n'
+                """),
+            aysnc_execution=True,
+            output_file='output_files/keyword_targeting_report.md'
+        )
+
+    def create_seo_content_brief(self, agent, context):
+        return Task(
+            description="""Create an SEO content brief for the blog post""",
+            agent=agent,
+            context=context,
+            expected_output=textwrap.dedent(
+                """ This is a comprehensive guide for the author that outlines the structure of the blog post, including 
+                suggested headings, subheadings, keyword placement, recommended word count, and any specific SEO elements 
+                that need to be integrated into the content. It may also include audience insights to help tailor the 
+                content appropriately.
+                Example Output:
+                '## SEO Content Brief for "{Blog Post Title}"\\n\\n
+                **Target Keywords:** keyword1, keyword2, keyword3\\n\\n
+                **Meta Description:** {SEO-optimized meta description}\\n\\n'
+                """),
+            async_execution=True,
+            output_file='output_files/seo_content_brief.md'
+        )
+
+    
