@@ -97,23 +97,23 @@ class BloggerCrewAgents():
                 Here a some examples of prompts you can use to generate images using AI image generators like 
                 Midjourney, DallE or Stable Diffusion:
 
-                    1. A stunning aerial view of a tropical island with white sandy beaches, turquoise waters, and lush green palm trees, highly detailed, 8k resolution.
+                    1. A stunning aerial view of a tropical island with white sandy beaches, turquoise waters, and lush green palm trees, highly detailed.
 
                     2. Portrait of a wise old man with wrinkles, grey hair, and a long beard, wearing a traditional tunic, soft lighting, highly detailed skin texture style.
 
                     3. An elegant black horse galloping through a field of tall grass with mountains in the background, golden hour lighting, highly detailed fur and grass.
 
-                    4. Close-up of a red rose with dew drops on the petals, black background, studio lighting, highly detailed, 8k resolution.
+                    4. Close-up of a red rose with dew drops on the petals, black background, studio lighting, highly detailed.
 
                     5. A cozy log cabin in a snowy forest, warm light glowing from the windows, highly detailed wood texture and snow style.
 
-                    6. Vintage 1950s American diner with neon signs, chrome details, and red leather booths, highly detailed, 8k resolution.
+                    6. Vintage 1950s American diner with neon signs, chrome details, and red leather booths, highly detailed.
 
                     7. Majestic grey wolf standing on a rocky cliff overlooking a misty valley at dawn, highly detailed fur and rock texture.
 
-                    8. Close-up of a human eye with intricate details of the iris, eyelashes, and skin texture, studio lighting, 8k resolution.
+                    8. Close-up of a human eye with intricate details of the iris, eyelashes, and skin texture, studio lighting.
 
-                Remember, to keep the prompt descriptive and specific. Including details about the subject, setting, lighting, textures, and 
+                Remember to keep the prompt descriptive and specific. Including details about the subject, setting, lighting, textures, and 
                 style can help achieve what we're looking for. Avoid using terms like "photorealistic" in your prompts, as DALL·E interprets 
                 these as a style of art rather than a descriptor of a photograph. Incorporating details such as camera settings, lens type, 
                 and lighting conditions in your prompts can help generate better photos
@@ -152,6 +152,21 @@ class BloggerCrewAgents():
                 """),
             verbose=True,
             allow_delegation=True,            
+            llm=gpt4,
+            max_rpm=10000
+        )
+    
+    def web_designer(self):
+        return Agent(
+            role='WebDesigner',
+            goal='Design and enhance the visual elements of the blog post',
+            backstory=textwrap.dedent(
+                """
+                As a web designer, you create the visual elements that enhance the user experience and
+                convey the brand's identity.
+                """),
+            verbose=True,
+            allow_delegation=True,
             llm=gpt4,
             max_rpm=10000
         )
