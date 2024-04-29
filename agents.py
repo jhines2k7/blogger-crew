@@ -4,20 +4,24 @@ from tools.photography_tool import PhotographyTool
 from tools.cropping_tool import CroppingTool
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 
 import textwrap
 
 llama3 = ChatGroq(
     model="llama3-70b-8192"
 )
-
 llama3_rpm = 30
 
 gpt4 = ChatOpenAI(
     model="gpt-4-turbo"
 )
-
 gpt4_rpm = 10000
+
+claude3 = ChatAnthropic(
+    model="claude-3-opus-20240229"
+)
+claude3_rpm = 1000
 
 class BloggerCrewAgents():
     def content_strategist(self):
@@ -115,8 +119,8 @@ class BloggerCrewAgents():
             verbose=True,
             allow_delegation=True,
             tools=[PhotographyTool.generate_image, CroppingTool.crop_image],
-            llm=gpt4,
-            max_rpm=gpt4_rpm
+            llm=claude3,
+            max_rpm=claude3_rpm
         )
 
     def social_media_manager(self):

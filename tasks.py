@@ -74,12 +74,12 @@ class BloggerTasks():
         return Task(
             description=textwrap.dedent(
                 """
-                    Take the content from the final draft of the blog post, and use it to the build the 
-                    markup for the blog post including text, images, links, and formatting.
-                    Do not attempt to reconstruct an entire index.html page. The resulting HTML should 
-                    be a fragment that can be inserted into an existing page. The image urls will be
-                    be available to you in a text file called cropped_image_urls.txt. There should be 
-                    5 images in total. Don't forget to grab some text from the draft to use in the 
+                    Take the content from the final draft of the blog post, and use it to replace the 
+                    placeholder text in the example you've been given while building the 
+                    markup for the blog. Do not attempt to reconstruct an entire index.html page. The 
+                    resulting HTML should be a fragment that can be inserted into an existing page. 
+                    The image urls will be available to you in a text file called cropped_image_urls.txt.
+                    There should be 5 images in total. Don't forget to grab some text from the draft to use in the 
                     blockquote. Follow the example output very closely as a template for the HTML you 
                     generate. Do not refactor the markup. The names of the classes and html elements 
                     are necessary to ensure the blog post will be rendered properly in the browser and 

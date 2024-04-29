@@ -1,6 +1,7 @@
 import os
 
 from crewai import Crew, Process
+from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
 from agents import BloggerCrewAgents
 from tasks import BloggerTasks
@@ -12,9 +13,15 @@ load_dotenv()
 agents = BloggerCrewAgents()
 tasks = BloggerTasks()
 
+claude3 = ChatAnthropic(
+    model="claude-3-opus-20240229"
+)
+claude3_rpm = 1000
+
 gpt4 = ChatOpenAI(
     model="gpt-4-turbo"
 )
+gpt4_rpm = 10000
 
 # Instantiate the agents
 content_strategist = agents.content_strategist()
@@ -58,9 +65,9 @@ crew = Crew(
         crop_images,
         convert_to_html],
     process=Process.hierarchical,
-    manager_llm=gpt4,
+    manager_llm=claude3,
     verbose=2,
-    max_rpm=10000,
+    max_rpm=claude3_rpm,
     output_log_file=True
 )
 
